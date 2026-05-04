@@ -23,6 +23,15 @@ def create_alumno(alumno: AlumnoCreate, db: Session = Depends(get_db)):
 def get_alumnos(db: Session = Depends(get_db)):
     return db.query(Alumno).all()
 
+@router.get("/en-seguimiento")
+def alumnos_en_seguimiento(db: Session = Depends(get_db)):
+    from app.models.estado_alumno import EstadoAlumno
+
+    estado = db.query(EstadoAlumno).filter_by(codigo="EN_SEGUIMIENTO").first()
+
+    return db.query(Alumno).filter(Alumno.estado_id == estado.id).all()
+
+
 @router.get("/{alumno_id}", response_model=AlumnoResponse)
 def get_alumno(alumno_id: int, db: Session = Depends(get_db)):
     alumno = db.query(Alumno).filter(Alumno.id == alumno_id).first()
