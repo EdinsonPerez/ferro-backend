@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, Boolean, ForeignKey, Date
 from sqlalchemy.orm import relationship
+from datetime import date
 from app.db.base import Base
 
 class Asistencia(Base):
@@ -11,6 +12,7 @@ class Asistencia(Base):
     clase_id = Column(Integer, ForeignKey("clases.id"))
 
     presente = Column(Boolean)
+    fecha = Column(Date, default=date.today)
 
     alumno = relationship("Alumno")
     clase = relationship("Clase")

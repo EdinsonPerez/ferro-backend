@@ -15,8 +15,9 @@ def registrar_asistencia(db: Session, alumno_id: int, clase_id: int, presente: b
 
     db.add(asistencia)
     db.commit()
+    db.refresh(asistencia)
 
-    # 🔥 LÓGICA BPMN
+    # LÓGICA BPMN
     if not presente:
         ausencias = db.query(Asistencia).filter(
             Asistencia.alumno_id == alumno_id,
