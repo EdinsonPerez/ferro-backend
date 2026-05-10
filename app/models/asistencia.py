@@ -14,5 +14,7 @@ class Asistencia(Base):
     presente = Column(Boolean)
     fecha = Column(Date, default=date.today)
 
+    justificada = Column(Boolean, default = False)
+
     alumno = relationship("Alumno")
     clase = relationship("Clase")

@@ -22,3 +22,8 @@ def crear_asistencia(alumno_id: int, clase_id: int, presente: bool, db: Session 
 @router.get("/{alumno_id}")
 def historial_asistencia(alumno_id: int, db: Session = Depends(get_db)):
     return db.query(Asistencia).filter(Asistencia.alumno_id == alumno_id).all()
+
+@router.get("/ausencias-recientes/{alumno_id}")
+def ver_ausencias_recientes(alumno_id: int, db: Session = Depends(get_db)):
+    from app.services.asistencia_service import obtener_ausencias_ultimos_7_dias
+    return obtener_ausencias_ultimos_7_dias(db, alumno_id)
