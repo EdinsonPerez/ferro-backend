@@ -31,6 +31,15 @@ def alumnos_en_seguimiento(db: Session = Depends(get_db)):
 
     return db.query(Alumno).filter(Alumno.estado_id == estado.id).all()
 
+@router.get("/{alumno_id}/tutores")
+def obtener_tutores_alumno(alumno_id: int, db: Session = Depends(get_db)):
+
+    alumno = db.query(Alumno).filter(Alumno.id == alumno_id).first()
+
+    if not alumno:
+        raise HTTPException(status_code=404, detail="Alumno no encontrado")
+
+    return alumno.tutores
 
 @router.get("/{alumno_id}", response_model=AlumnoResponse)
 def get_alumno(alumno_id: int, db: Session = Depends(get_db)):

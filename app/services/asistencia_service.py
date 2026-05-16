@@ -49,17 +49,31 @@ def registrar_asistencia(db: Session, alumno_id: int, clase_id: int, presente: b
 def manejar_alerta_ausencias(db: Session, alumno_id: int):
     print(f"Alumno {alumno_id} tiene 3 o más ausencias en los últimos 7 días")
 
-    enviar_correo_tutor(alumno_id)
+    enviar_correo_tutor(db, alumno_id)
 
-    # simulamos respuesta del tutor
-    decision = "SI"  # en futuro vendrá de UI o API
+    decision = "SI"
 
     if decision == "SI":
         notificar_administracion(alumno_id)
 
-def enviar_correo_tutor(alumno_id: int):
-    print(f"Email al tutor: El alumno {alumno_id} presenta inasistencias.")
-    print("¿Desea desvincular al alumno?")
+def enviar_correo_tutor(db: Session, alumno_id: int):
+
+    alumno = db.query(Alumno).filter(Alumno.id == alumno_id).first()
+
+    if not alumno:
+        print("Alumno no encontrado")
+        return
+
+    if not alumno.tutores:
+        print("El alumno no tiene tutores asignados")
+        return
+
+    for tutor in alumno.tutores:
+        print("=====================================")
+        print(f"📧 Enviando email a: {tutor.email}")
+        print(f"👤 Tutor: {tutor.nombre}")
+        print(f"📢 Mensaje: El alumno {alumno.nombre} {alumno.apellido} tiene 3 ausencias.")
+        print("❓ ¿Desea desvincular al alumno?")
 
 def notificar_administracion(alumno_id: int):
     print(f"Email a administración:")
